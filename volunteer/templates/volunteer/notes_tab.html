@@ -1,0 +1,57 @@
+<h4>
+    Notes
+    <span class="inline-related small">
+        <a href="{% url 'volunteer:note_add' volunteer_id %}" title="Create">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </span>
+</h4>
+
+{% if notes %}
+    <script>
+        $(document).ready(function(){
+            $('#notesTable').DataTable({
+                "order": [[0, "desc"]],
+                "columnDefs": [
+                    { orderable: false, targets: [2]},
+                    { searchable: false, targets: [2]}
+                ]
+            });
+        });
+    </script>
+
+    <table id="notesTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Created By</th>
+                <th>Note</th>
+                <th>Updated</th>
+                <th>Updated By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in notes %}
+                <tr>
+                    <td>
+                        <a href="{% url 'volunteer:note_edit' volunteer_id note.id %}">
+                            {{ note.dt_created|date:'Y-m-d h:i A' }}
+                        </a>
+                    </td>
+                    <td>{{ note.created_by.first_name }} {{ note.created_by.last_name }}</td>
+                    <td>{{ note.note|safe|truncatechars:30 }}</td>
+                    <td>{{ note.dt_updated|date:'Y-m-d h:i A' }}</td>
+                    <td>{{ note.updated_by.first_name }} {{ note.updated_by.last_name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                No notes
+            </div>
+        </div>
+    </div>
+{% endif %}

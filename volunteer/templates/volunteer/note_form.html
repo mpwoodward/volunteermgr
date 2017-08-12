@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block title %}Note{% endblock %}
+
+{% block content %}
+    <h2>
+        {% if form.instance.id %}Edit{% else %}Add{% endif %} Note
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Required fields are indicated with a red asterisk</li>
+                <li>Scroll to the bottom of the screen and click Save to save your changes</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Fields with a red asterisk (<span style="color:red;">*</span>) are required</p>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="form-group required{% if form.note.errors %} has-error{% endif %}">
+            <label for="{{ form.note.auto_id }}" class="col-sm-2 control-label">Note</label>
+            <div class="col-sm-4">
+                {{ form.note|htmlattributes:'class:form-control' }}
+                {% if form.note.errors %}
+                    <p class="help-inline text-danger">{{ form.note.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

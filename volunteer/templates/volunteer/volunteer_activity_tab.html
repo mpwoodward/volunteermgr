@@ -1,0 +1,125 @@
+<h4>
+    Volunteer Activity
+    <span class="inline-related small">
+        <a href="{% url 'volunteer:volunteer_activity_edit' volunteer.id %}" title="Edit">
+            <span class="glyphicon glyphicon-edit"></span>
+        </a>
+    </span>
+</h4>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Activities</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul>
+            {% for activity in volunteer.volunteer_activities.all %}
+                <li>{{ activity }}</li>
+            {% empty %}
+                <li>None</li>
+            {% endfor %}
+            </ul>
+            {% if volunteer.volunteer_other %}
+                <h6>Other Activities</h6>
+                <ul>
+                    <li>{{ volunteer.volunteer_other|safe }}</li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Previous Organizing Experience</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ volunteer.previous_organizing_experience|safe|default_if_none:'--' }}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Active in Presidential Primary</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ volunteer.active_in_presidential_primary|safe|default_if_none:'--' }}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Other Skills</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ volunteer.other_skills|safe|default_if_none:'--' }}
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<h4>Social Media</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Facebook</strong>
+            </div>
+            <div class="col-md-9">
+                {% if volunteer.facebook_profile %}
+                    <a href="{{ volunteer.facebook_profile }}" target="_blank">{{ volunteer.facebook_profile }}</a>
+                {% else %}
+                    --
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Twitter</strong>
+            </div>
+            <div class="col-md-9">
+                {% if volunteer.twitter_profile %}
+                    <a href="{{ volunteer.twitter_profile }}" target="_blank">{{ volunteer.twitter_profile }}</a>
+                {% else %}
+                    --
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Instagram</strong>
+            </div>
+            <div class="col-md-9">
+                {% if volunteer.instagram_profile %}
+                    <a href="{{ volunteer.instagram_profile }}" target="_blank">{{ volunteer.instagram_profile }}</a>
+                {% else %}
+                    --
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if volunteer.volunteer_comments %}
+    <hr/>
+
+    <h4>Comments</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            {{ volunteer.volunteer_comments|safe }}
+        </div>
+    </div>
+{% endif %}

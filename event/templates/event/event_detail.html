@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ event.name }}{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#tabs a').click(function (e) {
+                e.preventDefault();
+
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+                var pane = $(this);
+
+                // ajax load from data-url
+                $(href).load(url,function(result){
+                    pane.tab('show');
+                });
+            });
+
+            // load first tab content
+            $('#detailstab').load($('.active a').attr("data-url"),function(result){
+              $('.active a').tab('show');
+            });
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        {{ event.name }}&nbsp;
+        <span class="inline-related small">{{ event.dt_start|date:'M j, Y' }}</span>
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+            <a href="{% url 'event:edit_event' event.id %}">
+                <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+                </button>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Click the Edit button to edit the event details and attendees</li>
+            </ul>
+        </div>
+    </div>
+
+    <ul id="tabs" class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a href="#detailstab" data-url="{% url 'event:event_detail_tab' event.id %}" data-toggle="tab">Details</a>
+        </li>
+        <li role="presentation">
+            <a href="#attendeestab" data-url="{% url 'event:event_attendees_tab' event.id %}" data-toggle="tab">
+                Attendees
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- EVENT DETAILS -->
+        <div class="tab-pane active" id="detailstab">
+        </div>
+
+        <!-- ATTENDEES -->
+        <div class="tab-pane active" id="attendeestab">
+        </div>
+
+        <!-- VOLUNTEERS -->
+        <div class="tab-pane" id="volunteerstab">
+        </div>
+    </div>
+{% endblock %}

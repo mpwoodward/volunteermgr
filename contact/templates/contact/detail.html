@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ contact }}{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#tabs a').click(function (e) {
+                e.preventDefault();
+
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+                var pane = $(this);
+
+                // ajax load from data-url
+                $(href).load(url,function(result){
+                    pane.tab('show');
+                });
+            });
+
+            // load first tab content
+            $('#detailstab').load($('.active a').attr("data-url"),function(result){
+              $('.active a').tab('show');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        div.inline {
+            display: inline;
+            margin-right: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h2{% if not contact.is_active %} style="color:red;"{% endif %}>
+        {{ contact }}
+        {% if not contact.is_active %} (INACTIVE){% endif %}
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Click the various tabs to view more details about the contact.</li>
+                <li>Click the <span class="glyphicon glyphicon-edit"></span> next to the Contact header
+                    on the Detail tab to edit the contact.</li>
+                <li>Click the Notes tab to add a note or manage existing notes for the volunteer.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="well well-sm">
+        <div class="row-fluid">
+            <div class="inline">
+                <strong>Organization: </strong>{{ contact.organization }}
+            </div>
+            <div class="inline">
+                <strong>Categories: </strong>
+                {% for c in contact.categories.all %}
+                    {{ c }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <ul id="tabs" class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a href="#detailstab" data-url="{% url 'contact:detail_tab' contact.id %}" data-toggle="tab">Details</a>
+        </li>
+        <li role="presentation">
+            <a href="#notestab" data-url="{% url 'contact:notes_tab' contact.id %}" data-toggle="tab">
+                Notes
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- CONTACT DETAILS -->
+        <div class="tab-pane active" id="detailstab">
+        </div>
+
+        <!-- NOTES -->
+        <div class="tab-pane" id="notestab">
+        </div>
+    </div>
+{% endblock %}

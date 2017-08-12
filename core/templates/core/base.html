@@ -1,0 +1,159 @@
+{% load htmlattributes static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>People's Party: {% block title %}{% endblock %}</title>
+
+        <!-- BOOTSTRAP -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css"
+              integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT"
+              crossorigin="anonymous"/>
+        <link rel="stylesheet" href="{% static 'core/css/theme.css' %}"/>
+
+        <!-- FONT AWESOME -->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+              crossorigin="anonymous">
+
+        <script>
+            window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';
+        </script>
+
+        {% block extra_styles %}
+        {% endblock %}
+    </head>
+    <body role="document">
+        <!-- NAVBAR -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'contact:search' %}">
+                        People's Party
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                {% if request.user.is_authenticated %}
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a id="people" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-users"></i> People <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'volunteer:search' %}">Volunteers</a></li>
+                                <li><a href="{% url 'volunteer:volunteer_activities' %}">Volunteer Activities</a></li>
+                                <li><a href="{% url 'contact:search' %}">Contacts</a></li>
+                                {% if request.user.is_superuser %}
+                                    <li><a href="{% url 'petition:petition_signers' %}">Petition Signers</a></li>
+                                {% elif request.user.account_type and request.user.account_type.key == 'national' %}
+                                    <li><a href="{% url 'petition:petition_signers' %}">Petition Signers</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a id="calls" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-phone"></i> Calls <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'phonecall:calls' %}">Conference Calls</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a id="organizations" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-fire"></span> States <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'organization:list' %}">States</a></li>
+                                <li><a href="{% url 'organization:staff' %}">Staff</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-lock"></i> {{ request.user.first_name }} {{ request.user.last_name }} <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'security:change_password' %}">Change Password</a></li>
+                                <li><a href="{% url 'security:logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <div id="content" class="container" role="main">
+            <!-- MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
+                        <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times" title="Close"></i></button>
+                        {{ message.message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- CONTENT -->
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+    <!-- JQUERY -->
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <!-- DATATABLES -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css"/>
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+    <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            function csrfSafeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                crossDomain: false,
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
+                        xhr.setRequestHeader('Authentication', '{{ access_token }}');
+                    }
+                }
+            });
+        });
+    </script>
+
+    {% block extra_scripts %}
+    {% endblock %}
+</html>

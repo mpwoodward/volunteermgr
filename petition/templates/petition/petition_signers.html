@@ -1,0 +1,111 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function(){
+            $('.datepicker').datepicker();
+
+            $('#contactsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{% url 'petition:petition_signers_search_json' %}' + location.search,
+                order: [[0, 'desc'], [1, 'asc'], [2, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: [3, 7] },
+                    { searchable: false, targets: [3, 7] }
+                ],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Filter ...'
+                },
+                dom: 'lBftrip',
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, 'All']],
+                pageLength: 25,
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block title %}Petition Signers{% endblock %}
+
+{% block content %}
+    <h2>
+        Petition Signers
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#search" aria-expanded="false"
+               aria-controls="search">
+                <span class="glyphicon glyphicon-search"></span>
+            </a>
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Type in the filter box to filter the list by date signed, name, city, state, or zip code</li>
+                <li>Click the <span class="glyphicon glyphicon-search"></span> to search on additional criteria</li>
+                <li>Click the email address to create an email to the contact (will launch in your computer's
+                    default email client)</li>
+                <li>Use the buttons above the list to copy, export to Excel, etc. but note that it will
+                    <em>only export what is visible on the screen</em>. If you want to export more than
+                    25 records, be sure and change the "Show 25 entries" selection to "All" before exporting.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="well collapse{% if request.GET.csrfmiddlewaretoken %} in{% endif %}" id="search">
+        <form action="" method="get">
+            {% csrf_token %}
+            <div class="row" style="margin-bottom:10px;">
+                <div class="col-md-12">
+                    <div class="form-group form-inline" style="display:inline;">
+                        <label for="{{ form.date_signed.auto_id }}">{{ form.date_signed.label }}</label>
+                        {{ form.date_signed|htmlattributes:'class:form-control datepicker' }}
+                        <label for="{{ form.city.auto_id }}">{{ form.city.label }}</label>
+                        {{ form.city|htmlattributes:'class:form-control' }}
+                        <label for="{{ form.state.auto_id }}">{{ form.state.label }}</label>
+                        {{ form.state|htmlattributes:'class:form-control' }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-inline" style="display:inline;">
+                        <label for="{{ form.zip.auto_id }}">{{ form.zip.label }}</label>
+                        {{ form.zip|htmlattributes:'class:form-control' }}
+                        <label for="{{ form.zip_radius.auto_id }}">{{ form.zip_radius.label }}</label>
+                        {{ form.zip_radius|htmlattributes:'class:form-control' }}
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table id="contactsTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Date Signed</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Other</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,237 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block title %}
+    {% if form.instance.id %}Edit{% else %}Add{% endif %} Volunteer
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker();
+            $('.chosen-select').chosen({
+                width: "95%",
+                placeholder_text_multiple: "Select ..."
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        {% if form.instance.id %}Edit{% else %}Add{% endif %} Volunteer
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Required fields are indicated with a red asterisk</li>
+                <li>Scroll to the bottom of the screen and click Save to save your changes</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Fields with a red asterisk (<span style="color:red;">*</span>) are required</p>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.media }}
+        {% if form.organization %}
+            <div class="form-group{% if form.organization.errors %} has-error{% endif %}">
+                <label for="{{ form.organization.auto_id }}" class="col-sm-2 control-label">Organization</label>
+                <div class="col-sm-4">
+                    {{ form.organization|htmlattributes:'class:form-control' }}
+                    {% if form.organization.errors %}
+                        <p class="help-inline text-danger">{{ form.orgnization.errors|striptags }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-group required{% if form.first_name.errors %} has-error{% endif %}">
+            <label for="{{ form.first_name.auto_id }}" class="col-sm-2 control-label">First Name</label>
+            <div class="col-sm-4">
+                {{ form.first_name|htmlattributes:'class:form-control' }}
+                {% if form.first_name.errors %}
+                    <p class="help-inline text-danger">{{ form.first_name.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.preferred_name.auto_id }}" class="col-sm-2 control-label">Preferred Name</label>
+            <div class="col-sm-4">
+                {{ form.preferred_name|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.middle_name.auto_id }}" class="col-sm-2 control-label">Middle Name</label>
+            <div class="col-sm-4">
+                {{ form.middle_name|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group required{% if form.last_name.errors %} has-error{% endif %}">
+            <label for="{{ form.last_name.auto_id }}" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-4">
+                {{ form.last_name|htmlattributes:'class:form-control' }}
+                {% if form.last_name.errors %}
+                    <p class="help-inline text-danger">{{ form.last_name.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.suffix.auto_id }}" class="col-sm-2 control-label">Suffix</label>
+            <div class="col-sm-4">
+                {{ form.suffix|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group required{% if form.email.errors %} has-error{% endif %}">
+            <label for="{{ form.email.auto_id }}" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-4">
+                {{ form.email|htmlattributes:'class:form-control' }}
+                {% if form.email.errors %}
+                    <p class="help-inline text-danger">{{ form.email.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.phone.errors %} has-error{% endif %}">
+            <label for="{{ form.phone.auto_id }}" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-2">
+                {{ form.phone|htmlattributes:'class:form-control' }}
+                {% if form.phone.errors %}
+                    <p class="help-inline text-danger">{{ form.phone.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.address_1.auto_id }}" class="col-sm-2 control-label">Address</label>
+            <div class="col-sm-4">
+                {{ form.address_1|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.address_2.auto_id }}" class="col-sm-2 control-label">Address (cont.)</label>
+            <div class="col-sm-4">
+                {{ form.address_2|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.city.auto_id }}" class="col-sm-2 control-label">City</label>
+            <div class="col-sm-4">
+                {{ form.city|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        {% if form.state %}
+            <div class="form-group required{% if form.state.errors %} has-error{% endif %}">
+                <label for="{{ form.state.auto_id }}" class="col-sm-2 control-label">State</label>
+                <div class="col-sm-2">
+                    {{ form.state|htmlattributes:'class:form-control' }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-group{% if form.zip.errors %} has-error{% endif %}">
+            <label for="{{ form.zip.auto_id }}" class="col-sm-2 control-label">Zip</label>
+            <div class="col-sm-2">
+                {{ form.zip|htmlattributes:'class:form-control' }}
+                {% if form.zip.errors %}
+                    <p class="help-inline text-danger">{{ form.zip.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.sources.errors %} has-error{% endif %}">
+            <label for="{{ form.sources.auto_id }}" class="col-sm-2 control-label">Source</label>
+            <div class="col-sm-4">
+                {{ form.sources|htmlattributes:'class:form-control chosen-select' }}
+                {% if form.sources.errors %}
+                    <p class="help-inline text-danger">{{ form.sources.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.dt_signed_petition.errors %} has-error{% endif %}">
+            <label for="{{ form.dt_signed_petition.auto_id }}" class="col-sm-2 control-label">Signed Petition</label>
+            <div class="col-sm-2">
+                {{ form.dt_signed_petition|htmlattributes:'class:form-control datepicker' }}
+                {% if form.dt_signed_petition.errors %}
+                    <p class="help-inline text-danger">{{ form.dt_signed_petition.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.date_signed_up.errors %} has-error{% endif %}">
+            <label for="{{ form.date_signed_up.auto_id }}" class="col-sm-2 control-label">Date Signed Up</label>
+            <div class="col-sm-2">
+                {{ form.date_signed_up|htmlattributes:'class:form-control datepicker' }}
+                {% if form.date_signed_up.errors %}
+                    <p class="help-inline text-danger">{{ form.date_signed_up.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.date_added_to_list.errors %} has-error{% endif %}">
+            <label for="{{ form.date_added_to_list.auto_id }}" class="col-sm-2 control-label">Date Added to List</label>
+            <div class="col-sm-2">
+                {{ form.date_added_to_list|htmlattributes:'class:form-control datepicker' }}
+                {% if form.date_added_to_list.errors %}
+                    <p class="help-inline text-danger">{{ form.date_added_to_list.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.date_contacted.errors %} has-error{% endif %}">
+            <label for="{{ form.date_contacted.auto_id }}" class="col-sm-2 control-label">Date Contacted</label>
+            <div class="col-sm-2">
+                {{ form.date_contacted|htmlattributes:'class:form-control datepicker' }}
+                {% if form.date_contacted.errors %}
+                    <p class="help-inline text-danger">{{ form.date_contacted.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.contacted_by.errors %} has-error{% endif %}">
+            <label for="{{ form.contacted_by.auto_id }}" class="col-sm-2 control-label">Contacted By</label>
+            <div class="col-sm-4">
+                {{ form.contacted_by|htmlattributes:'class:form-control' }}
+                {% if form.contacted_by.errors %}
+                    <p class="help-inline text-danger">{{ form.contacted_by.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.categories.errors %} has-error{% endif %}">
+            <label for="{{ form.categories.auto_id }}" class="col-sm-2 control-label">Categories</label>
+            <div class="col-sm-4">
+                {{ form.categories|htmlattributes:'class:form-control chosen-select' }}
+                {% if form.categories.errors %}
+                    <p class="help-inline text-danger">{{ form.categories.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.details.auto_id }}" class="col-sm-2 control-label">Details</label>
+            <div class="col-sm-4">
+                {{ form.details }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_active }} Active
+                    </label>
+                </div>
+                <p class="help-block">Uncheck if person should not be contacted for any reason</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

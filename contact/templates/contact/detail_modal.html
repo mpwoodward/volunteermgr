@@ -1,0 +1,160 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"{% if not contact.is_active %} style="color:red;"{% endif %}>
+            {{ contact.full_name }}{% if not contact.is_active %} (INACTIVE){% endif %}
+        <span class="pull-right">
+            <a href="{% url 'contact:edit' contact.id %}">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+        </span>
+    </h4>
+</div>
+<div class="modal-body">
+    <h4>Contact</h4>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-3 text-right">
+                    <strong>Full Name</strong>
+                </div>
+                <div class="col-md-9">
+                    {{ contact.full_name }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-3 text-right">
+                    <strong>Preferred Name</strong>
+                </div>
+                <div class="col-md-9">
+                    {% if contact.preferred_name %}
+                        {{ contact.preferred_name }}
+                    {% else %}
+                        {{ contact.first_name }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-3 text-right">
+                    <strong>Email</strong>
+                </div>
+                <div class="col-md-9">
+                    {% if contact.email %}
+                        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-3 text-right">
+                    <strong>Phone</strong>
+                </div>
+                <div class="col-md-9">
+                    {{ contact.phone|default_if_none:'-' }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <hr/>#}
+{##}
+{#    <h4>Address</h4>#}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right">#}
+{#                    <strong>Physical</strong>#}
+{#                </div>#}
+{#                <div class="col-md-9">#}
+{#                    {% if contact.physical_address %}#}
+{#                        {{ contact.physical_address }}<br/>#}
+{#                        {{ contact.physical_city }} {{ contact.physical_state }} {{ contact.physical_zip }}&nbsp;#}
+{#                        <a href="https://maps.google.com/?q={{ contact.physical_address }}, {{ contact.physical_city }}, {{ contact.physical_state }}, {{ contact.physical_zip }}" target="_blank">#}
+{#                            <span class="glyphicon glyphicon-map-marker" title="View on Map"></span>#}
+{#                        </a>#}
+{#                    {% else %}#}
+{#                        ---#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row" style="margin-top:10px;">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right">#}
+{#                    <strong>Mailing</strong>#}
+{#                </div>#}
+{#                <div class="col-md-9">#}
+{#                    {% if contact.mailing_address1 %}#}
+{#                        {{ contact.mailing_address1 }}<br/>#}
+{#                        {% if contact.mailing_address2 %}#}
+{#                            {{ contact.mailing_address2 }}<br/>#}
+{#                        {% endif %}#}
+{#                        {% if contact.mailing_address3 %}#}
+{#                            {{ contact.mailing_address3 }}<br/>#}
+{#                        {% endif %}#}
+{#                        {% if contact.mailing_address4 %}#}
+{#                            {{ contact.mailing_address4 }}<br/>#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        Unknown#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <hr/>#}
+{##}
+{#    <h4>Additional Info</h4>#}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right"><strong>State Voter ID</strong></div>#}
+{#                <div class="col-md-9">{{ contact.voter_id|default_if_none:'-' }}</div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right"><strong>VAN ID</strong></div>#}
+{#                <div class="col-md-9">{{ contact.van_id|default_if_none:'-' }}</div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right"><strong>Gender</strong></div>#}
+{#                <div class="col-md-9">{{ contact.gender|default_if_none:'-' }}</div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-md-6">#}
+{#                <div class="col-md-3 text-right"><strong>Birthdate</strong></div>#}
+{#                <div class="col-md-9">#}
+{#                    {% if contact.birthdate %}#}
+{#                        {{ contact.birthdate|date:'m/d/Y' }}#}
+{#                    {% else %}#}
+{#                        -#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <hr/>#}
+
+    {% if contact.details %}
+        <h4>Details</h4>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">{{ contact.details|safe }}</div>
+            </div>
+        </div>
+    {% endif %}
+</div>

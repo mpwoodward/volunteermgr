@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function(){
+            $('#staffTable').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'ajax': '{% url 'organization:staff_json' %}',
+                'columnDefs': [
+                    { className: 'center-cell', 'targets': [6] },
+                    { orderable: false, targets: [2, 3, 6] },
+                    { searchable: false, targets: [2, 3, 6] }
+                ],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Filter ...'
+                },
+                dom: 'lBftrip',
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, 'All']],
+                pageLength: 25,
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        .center-cell { text-align:center; }
+    </style>
+{% endblock %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+    <h2>
+        All Staff
+        <span class="pull-right">
+            {% if not request.user.account_type.key == 'regional' %}
+                <a href="{% url 'organization:add_staff' %}">
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;Add Staff
+                    </button></a>
+            {% endif %}
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Type in the filter box to filter the list by name, state, or account type</li>
+                <li>Click the last name to edit the staff member</li>
+                <li>Click the email address to create an email to the staff member (will launch in your computer's
+                    default email client)</li>
+                <li>Use the buttons above the list to copy, export to Excel, etc. but note that it will
+                    <em>only export what is visible on the screen</em>. If you want to export more than
+                    25 records, be sure and change the "Show 25 entries" selection to "All" before exporting.</li>
+            </ul>
+        </div>
+    </div>
+
+    <table id="staffTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>States</th>
+                <th>Account Type</th>
+                <th>Superuser</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+{% endblock %}

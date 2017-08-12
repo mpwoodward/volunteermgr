@@ -1,0 +1,267 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block title %}{% if form.instance.id %}Edit{% else %}Add{% endif %} Staff{% endblock %}
+
+{% block extra_scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#{{ form.start_date.auto_id }}").datepicker();
+            $("#{{ form.end_date.auto_id }}").datepicker();
+            $("#{{ form.date_welcome_packet_sent.auto_id }}").datepicker();
+            $('.chosen-select').chosen({
+                width: "95%",
+                placeholder_text_multiple: "Select ..."
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        {% if form.instance.id %}Edit{% else %}Add{% endif %} Staff
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+
+            <ul>
+                <li>Required fields are indicated with a red asterisk.</li>
+                {% if request.user.is_superuser %}
+                    <li>Setting a staff member as a Superuser <strong><em>gives them the power to do literally
+                        everything in the system</em></strong>. Use carefully!</li>
+                    <li>Unless the account is a superuser account, an account type is required.</li>
+                {% endif %}
+                <li>Unchecking the "Active" box will prevent a user from being able to log in.</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Fields with a red asterisk (<span style="color:red;">*</span>) are required</p>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="form-group required{% if form.account_type.errors %} has-error{% endif %}">
+            <label for="{{ form.account_type.auto_id }}" class="col-sm-2 control-label">Account Type</label>
+            <div class="col-sm-4">
+                {{ form.account_type|htmlattributes:'class:form-control' }}
+                {% if form.account_type.errors %}
+                    <p class="help-inline text-danger">{{ form.account_type.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.first_name.errors %} has-error{% endif %}">
+            <label for="{{ form.first_name.auto_id }}" class="col-sm-2 control-label">First Name</label>
+            <div class="col-sm-4">
+                {{ form.first_name|htmlattributes:'class:form-control' }}
+                {% if form.first_name.errors %}
+                    <p class="help-inline text-danger">{{ form.first_name.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.last_name.errors %} has-error{% endif %}">
+            <label for="{{ form.last_name.auto_id }}" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-4">
+                {{ form.last_name|htmlattributes:'class:form-control' }}
+                {% if form.last_name.errors %}
+                    <p class="help-inline text-danger">{{ form.last_name.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.email.errors %} has-error{% endif %}">
+            <label for="{{ form.email.auto_id }}" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-4">
+                {{ form.email|htmlattributes:'class:form-control' }}
+                {% if form.email.errors %}
+                    <p class="help-inline text-danger">{{ form.email.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.organizations.errors %} has-error{% endif %}">
+            <label for="{{ form.organizations.auto_id }}" class="col-sm-2 control-label">States</label>
+            <div class="col-sm-4">
+                {{ form.organizations|htmlattributes:'class:form-control chosen-select' }}
+                {% if form.organizations.errors %}
+                    <p class="help-inline text-danger">{{ form.organizations.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.teams.errors %} has-error{% endif %}">
+            <label for="{{ form.teams.auto_id }}" class="col-sm-2 control-label">Teams</label>
+            <div class="col-sm-4">
+                {{ form.teams|htmlattributes:'class:form-control chosen-select' }}
+                {% if form.teams.errors %}
+                    <p class="help-inline text-danger">{{ form.teams.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.phone.errors %} has-error{% endif %}">
+            <label for="{{ form.phone.errors }}" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-4">
+                {{ form.phone|htmlattributes:'class:form-control' }}
+                {% if form.phone.errors %}
+                    <p class="help-inline text-danger">{{ form.phone.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.city.errors %} has-error{% endif %}">
+            <label for="{{ form.city.errors }}" class="col-sm-2 control-label">City</label>
+            <div class="col-sm-4">
+                {{ form.city|htmlattributes:'class:form-control' }}
+                {% if form.city.errors %}
+                    <p class="help-inline text-danger">{{ form.city.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.state.errors %} has-error{% endif %}">
+            <label for="{{ form.state.errors }}" class="col-sm-2 control-label">State</label>
+            <div class="col-sm-4">
+                {{ form.state|htmlattributes:'class:form-control' }}
+                {% if form.state.errors %}
+                    <p class="help-inline text-danger">{{ form.state.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.zip.errors %} has-error{% endif %}">
+            <label for="{{ form.zip.errors }}" class="col-sm-2 control-label">Zip</label>
+            <div class="col-sm-4">
+                {{ form.zip|htmlattributes:'class:form-control' }}
+                {% if form.zip.errors %}
+                    <p class="help-inline text-danger">{{ form.zip.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.start_date.errors %} has-error{% endif %}">
+            <label for="{{ form.start_date.errors }}" class="col-sm-2 control-label">Start Date</label>
+            <div class="col-sm-4">
+                {{ form.start_date|htmlattributes:'class:form-control' }}
+                {% if form.start_date.errors %}
+                    <p class="help-inline text-danger">{{ form.start_date.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.end_date.errors %} has-error{% endif %}">
+            <label for="{{ form.end_date.errors }}" class="col-sm-2 control-label">End Date</label>
+            <div class="col-sm-4">
+                {{ form.end_date|htmlattributes:'class:form-control' }}
+                {% if form.end_date.errors %}
+                    <p class="help-inline text-danger">{{ form.end_date.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.assigned_to.errors %} has-error{% endif %}">
+            <label for="{{ form.assigned_to.errors }}" class="col-sm-2 control-label">Assigned To</label>
+            <div class="col-sm-4">
+                {{ form.assigned_to|htmlattributes:'class:form-control' }}
+                {% if form.assigned_to.errors %}
+                    <p class="help-inline text-danger">{{ form.assigned_to.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.campus_lead }} Campus Lead
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.facebook_moderator }} Facebook Moderator
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group{% if form.date_welcome_packet_sent.errors %} has-error{% endif %}">
+            <label for="{{ form.date_welcome_packet_sent.errors }}" class="col-sm-2 control-label">Date Welcome Packet Sent</label>
+            <div class="col-sm-4">
+                {{ form.date_welcome_packet_sent|htmlattributes:'class:form-control' }}
+                {% if form.date_welcome_packet_sent.errors %}
+                    <p class="help-inline text-danger">{{ form.date_welcome_packet_sent.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.invited_to_slack }} Invited to Slack
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.sent_nda }} Sent NDA
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.returned_nda }} Returned NDA
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group{% if form.comments.errors %} has-error{% endif %}">
+            <label for="{{ form.comments.errors }}" class="col-sm-2 control-label">Comments</label>
+            <div class="col-sm-4">
+                {{ form.comments|htmlattributes:'class:form-control' }}
+                {% if form.comments.errors %}
+                    <p class="help-inline text-danger">{{ form.comments.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if request.user.is_superuser %}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_superuser }} Superuser
+                            <p class="help-inline">{{ form.is_superuser.help_text }}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <input type="hidden" name="is_superuser" value="False"/>
+        {% endif %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_active }} Active
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

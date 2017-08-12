@@ -1,0 +1,54 @@
+<h4>Conference Calls</h4>
+
+{% if phone_calls %}
+    <script>
+        $(document).ready(function(){
+            $('#phoneCallsTable').DataTable({
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+
+    <table id="phoneCallsTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>PIN</th>
+                <th>Caller ID</th>
+                <th>ZIP</th>
+                <th>State</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Duration</th>
+                <th>Hand Raises</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for call in phone_calls %}
+                <tr>
+                    <td>{{ call.call_date|date:'Y-m-d' }}</td>
+                    <td>{{ call.pin }}</td>
+                    <td>{{ call.caller_id }}</td>
+                    <td>{{ call.zip }}</td>
+                    <td>{{ call.state }}</td>
+                    <td>{{ call.start }}</td>
+                    <td>{{ call.end }}</td>
+                    <td>{{ call.duration }}</td>
+                    <td>
+                        {% for hr in call.handraises %}
+                            {{ hr }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                No conference calls
+            </div>
+        </div>
+    </div>
+{% endif %}

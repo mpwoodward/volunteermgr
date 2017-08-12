@@ -1,0 +1,112 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block title %}State{% endblock %}
+
+{% block extra_scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.chosen-select').chosen({
+                width: "95%",
+                placeholder_text_multiple: "Select ..."
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        State
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Required fields are indicated with a red asterisk</li>
+                <li>Scroll to the bottom of the screen and click Save to save your changes</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Fields with a red asterisk (<span style="color:red;">*</span>) are required</p>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="form-group required{% if form.name.errors %} has-error{% endif %}">
+            <label for="{{ form.name.auto_id }}" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-4">
+                {{ form.name|htmlattributes:'class:form-control' }}
+                {% if form.name.errors %}
+                    <p class="help-inline text-danger">{{ form.name.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_active }} Active
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group{% if form.state.errors %} has-error{% endif %}">
+            <label for="{{ form.state.auto_id }}" class="col-sm-2 control-label">State</label>
+            <div class="col-sm-4">
+                {{ form.state|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.zip.errors %} has-error{% endif %}">
+            <label for="{{ form.zip.auto_id }}" class="col-sm-2 control-label">Zip</label>
+            <div class="col-sm-4">
+                {{ form.zip|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.phone.errors %} has-error{% endif %}">
+            <label for="{{ form.phone.auto_id }}" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-4">
+                {{ form.phone|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.email.errors %} has-error{% endif %}">
+            <label for="{{ form.email.auto_id }}" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-4">
+                {{ form.email|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.url.errors %} has-error{% endif %}">
+            <label for="{{ form.url.auto_id }}" class="col-sm-2 control-label">Web Site</label>
+            <div class="col-sm-4">
+                {{ form.url|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.comments.errors %} has-error{% endif %}">
+            <label for="{{ form.comments.auto_id }}" class="col-sm-2 control-label">Comments</label>
+            <div class="col-sm-4">
+                {{ form.comments|htmlattributes:'class:form-control' }}
+                {% if form.comments.errors %}
+                    <p class="help-inline text-danger">{{ form.comments.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

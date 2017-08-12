@@ -1,0 +1,75 @@
+<h4>{{ event.name }}</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>Start Date/Time</strong>
+        </div>
+        <div class="col-md-10">
+            {{ event.dt_start|date:'m/d/Y h:i a' }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>End Date/Time</strong>
+        </div>
+        <div class="col-md-10">
+            {{ event.dt_end|date:'m/d/Y h:i a'|default_if_none:'-' }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>Location</strong>
+        </div>
+        <div class="col-md-10">
+            {{ event.location|default_if_none:'-' }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>Address</strong>
+        </div>
+        <div class="col-md-10">
+            {% if event.address_1 %}
+                {{ event.address_1 }}<br/>
+            {% endif %}
+            {% if event.address_2 %}
+                {{ event.address_2 }}<br/>
+            {% endif %}
+            {% if event.city %}
+                {{ event.city }}{% if event.state %}, {{ event.state }}{% endif %}{% if event.zip %} {{ event.zip }}{% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>Details</strong>
+        </div>
+        <div class="col-md-10">
+            {{ event.details|safe|default_if_none:'-' }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>URL</strong>
+        </div>
+        <div class="col-md-10">
+            {% if event.url %}
+                <a href="{{ event.url }}" target="_blank">{{ event.url }}</a>
+            {% else %}
+                -
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong>Contact</strong>
+        </div>
+        <div class="col-md-10">
+            {% if event.contact %}
+                <a href="{% url 'contact:detail' event.contact.id %}" target="_blank">{{ event.contact.short_name }}</a>
+            {% else %}
+                -
+            {% endif %}
+        </div>
+    </div>
+</div>

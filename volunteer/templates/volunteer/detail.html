@@ -1,0 +1,138 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ volunteer }}{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#tabs a').click(function (e) {
+                e.preventDefault();
+
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+                var pane = $(this);
+
+                // ajax load from data-url
+                $(href).load(url,function(result){
+                    pane.tab('show');
+                });
+            });
+
+            // load first tab content
+            $('#detailstab').load($('.active a').attr("data-url"),function(result){
+              $('.active a').tab('show');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        div.inline {
+            display: inline;
+            margin-right: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h2{% if not volunteer.is_active %} style="color:red;"{% endif %}>
+        {{ volunteer }}
+        {% if not volunteer.is_active %} (INACTIVE){% endif %}
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Click the various tabs to view more details about the volunteer.</li>
+                <li>Click the <span class="glyphicon glyphicon-edit"></span> next to the Volunteer header
+                    on the Detail tab to edit the volunteer.</li>
+                <li>Click the <span class="glyphicon glyphicon-edit"></span> next to the Volunteer Information header
+                    on the Volunteer tab to edit the volunteer detail information.</li>
+                <li>Click the Notes tab to add a note or manage existing notes for the volunteer.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="well well-sm">
+        <div class="row-fluid">
+            <div class="inline">
+                <strong>State: </strong>{{ volunteer.state }}
+            </div>
+            {% if volunteer.date_signed_up %}
+                <div class="inline">
+                    <strong>Signed Up: </strong> {{ volunteer.date_signed_up|date:'m/d/Y' }}
+                </div>
+            {% endif %}
+            {% if volunteer.date_added_to_list %}
+                <div class="inline">
+                    <strong>Date Added: </strong> {{ volunteer.date_added_to_list|date:'m/d/Y' }}
+                </div>
+            {% endif %}
+            {% if volunteer.date_contacted %}
+                <div class="inline">
+                    <strong>Contacted: </strong> {{ volunteer.date_contacted|date:'m/d/Y' }}
+                </div>
+            {% endif %}
+            <div class="inline">
+                <strong>Signed Petition: </strong>
+                {% if volunteer.signed_petition %}
+                    <span class="glyphicon glyphicon-ok-circle" style="color:green;"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-ban-circle" style="color:red;"></span>
+                {% endif %}
+            </div>
+            <div class="inline">
+                <strong>Calls Attended: </strong>{{ phone_call_count }}
+            </div>
+        </div>
+    </div>
+
+    <ul id="tabs" class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a href="#detailstab" data-url="{% url 'volunteer:detail_tab' volunteer.id %}" data-toggle="tab">Details</a>
+        </li>
+        <li role="presentation">
+            <a href="#volunteertab" data-url="{% url 'volunteer:volunteer_activity_tab' volunteer.id %}" data-toggle="tab">
+                Volunteer
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#phonecallstab" data-url="{% url 'volunteer:phone_calls_tab' volunteer.id %}" data-toggle="tab">
+                Conference Calls
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#notestab" data-url="{% url 'volunteer:notes_tab' volunteer.id %}" data-toggle="tab">
+                Notes
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- VOLUNTEER DETAILS -->
+        <div class="tab-pane active" id="detailstab">
+        </div>
+
+        <!-- VOLUNTEER ACTIVITIES -->
+        <div class="tab-pane" id="volunteertab">
+        </div>
+
+        <!-- PHONE CALLS -->
+        <div class="tab-pane" id="phonecallstab">
+        </div>
+
+        <!-- NOTES -->
+        <div class="tab-pane" id="notestab">
+        </div>
+    </div>
+{% endblock %}

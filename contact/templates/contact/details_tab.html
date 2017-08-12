@@ -1,0 +1,89 @@
+<h4>
+    Contact&nbsp;
+    <span class="inline-related small">
+        <a href="{% url 'contact:edit' contact.id %}" title="Edit">
+            <span class="glyphicon glyphicon-edit"></span>
+        </a>
+    </span>
+</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Full Name</strong>
+            </div>
+            <div class="col-md-9">
+                {{ contact.full_name }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Email</strong>
+            </div>
+            <div class="col-md-9">
+                {% if contact.email %}
+                    <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                {% else %}
+                    -
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Phone</strong>
+            </div>
+            <div class="col-md-9">
+                {{ contact.phone|default_if_none:'-' }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Categories</strong>
+            </div>
+            <div class="col-md-9">
+                {% for category in contact.categories.all %}
+                    {{ category.category }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    --
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<h4>Address</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% if contact.address_1 %}
+                {{ contact.address_1 }}<br/>
+                {% if contact.address_2 %}
+                    {{ contact.address_2 }}<br/>
+                {% endif %}
+                {{ contact.city }} {{ contact.state }} {{ contact.zip }}&nbsp;
+                <a href="https://maps.google.com/?q={{ contact.address_1 }}, {{ contact.city }}, {{ contact.state }}, {{ contact.zip }}" target="_blank">
+                    <span class="glyphicon glyphicon-map-marker" title="View on Map"></span>
+                </a>
+            {% else %}
+                ---
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+{% if contact.details %}
+    <h4>Details</h4>
+    <div class="row">
+        <div class="col-sm-12">{{ contact.details|safe }}</div>
+    </div>
+{% endif %}

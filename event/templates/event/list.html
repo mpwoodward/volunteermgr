@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function(){
+            $('#eventsTable').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'ajax': '{% url 'event:events_json' %}',
+                'order': [[1, 'desc']],
+                'columnDefs': [
+                    { className: 'center-cell', 'targets': [4] },
+                    { orderable: false, targets: [4] },
+                    { searchable: false, targets: [4] }
+                ],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Filter ...'
+                },
+                dom: 'lBftrip',
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, 'All']],
+                pageLength: 25,
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+
+        $('.modal').on('show.bs.modal', function(e) {
+            var link = $(e.relatedTarget);
+            $(this).find('.modal-content').load(link.attr('href'));
+        });
+
+        $('.modal').on('hidden.bs.modal', function() {
+            $('.modal-content').html('');
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        .center-cell { text-align:center; }
+    </style>
+{% endblock %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+    <h2>
+        Events
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+            <a href="{% url 'event:add_event' %}">
+                <button type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;Add Event
+                </button>
+            </a>
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Type in the filter box to filter the list by name, date, or location</li>
+                <li>Click the event name to view the details and attendees for the event</li>
+                <li>Use the buttons above the list to copy, export to Excel, etc. but note that it will
+                    <em>only export what is visible on the screen</em>. If you want to export more than
+                    25 records, be sure and change the "Show 25 entries" selection to "All" before exporting.</li>
+                <li>Click "Add Event" to add a new event</li>
+            </ul>
+        </div>
+    </div>
+
+    <table id="eventsTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Starts</th>
+                <th>Ends</th>
+                <th>Location</th>
+                <th>URL</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <div id="eventDetailModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div id="contactDetailModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+{% endblock %}

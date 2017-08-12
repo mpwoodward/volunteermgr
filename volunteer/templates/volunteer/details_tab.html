@@ -1,0 +1,113 @@
+<h4>
+    Contact&nbsp;
+    <span class="inline-related small">
+        <a href="{% url 'volunteer:edit' volunteer.id %}" title="Edit">
+            <span class="glyphicon glyphicon-edit"></span>
+        </a>
+    </span>
+</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Full Name</strong>
+            </div>
+            <div class="col-md-9">
+                {{ volunteer.full_name }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Email</strong>
+            </div>
+            <div class="col-md-9">
+                {% if volunteer.email %}
+                    <a href="mailto:{{ volunteer.email }}">{{ volunteer.email }}</a>
+                {% else %}
+                    -
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Phone</strong>
+            </div>
+            <div class="col-md-9">
+                {{ volunteer.phone|default_if_none:'-' }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3 text-right">
+                <strong>Categories</strong>
+            </div>
+            <div class="col-md-9">
+                {% for category in volunteer.categories.all %}
+                    {{ category.category }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    --
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<h4>Address</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% if volunteer.address_1 %}
+                {{ volunteer.address_1 }}<br/>
+                {% if volunteer.address_2 %}
+                    {{ volunteer.address_2 }}<br/>
+                {% endif %}
+                {{ volunteer.city }} {{ volunteer.state }} {{ volunteer.zip }}&nbsp;
+                <a href="https://maps.google.com/?q={{ volunteer.address_1 }}, {{ volunteer.city }}, {{ volunteer.state }}, {{ volunteer.zip }}" target="_blank">
+                    <span class="glyphicon glyphicon-map-marker" title="View on Map"></span>
+                </a>
+            {% else %}
+                ---
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<h4>Additional Info</h4>
+<div class="row">
+    <div class="col-sm-2 text-right"><strong>Date Signed Up</strong></div>
+    <div class="col-sm-10">
+        {% if volunteer.date_signed_up %}
+            {{ volunteer.date_signed_up|date:'m/d/Y' }}
+        {% else %}
+            --
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2 text-right"><strong>Source</strong></div>
+    <div class="col-sm-10">
+        {% for source in volunteer.sources.all %}
+            {{ source }}
+        {% empty %}
+            --
+        {% endfor %}
+    </div>
+</div>
+
+<hr/>
+
+{% if volunteer.details %}
+    <h4>Details</h4>
+    <div class="row">
+        <div class="col-sm-12">{{ volunteer.details|safe }}</div>
+    </div>
+{% endif %}

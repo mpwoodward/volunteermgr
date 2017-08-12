@@ -1,0 +1,132 @@
+{% extends 'core/base.html' %}
+
+{% load htmlattributes %}
+
+{% block title %}Volunteer Activities{% endblock %}
+
+{% block extra_scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.chosen-select').chosen({
+                width: "95%",
+                placeholder_text_multiple: "Select ..."
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        Edit Volunteer Activities
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        </span>
+    </h2>
+
+    <h4>{{ contact.full_name }}</h4>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Required fields are indicated with a red asterisk</li>
+                <li>Scroll to the bottom of the screen and click Save to save your changes</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Fields with a red asterisk (<span style="color:red;">*</span>) are required</p>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="form-group{% if form.volunteer_activities.errors %} has-error{% endif %}">
+            <label for="{{ form.volunteer_activities.auto_id }}" class="col-sm-2 control-label">Activities</label>
+            <div class="col-sm-4">
+                {{ form.volunteer_activities|htmlattributes:'class:form-control chosen-select' }}
+                {% if form.volunteer_activities.errors %}
+                    <p class="help-inline text-danger">{{ form.volunteer_activities.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.volunteer_other.errors %} has-error{% endif %}">
+            <label for="{{ form.volunteer_other.auto_id }}" class="col-sm-2 control-label">Other Activities</label>
+            <div class="col-sm-4">
+                {{ form.volunteer_other|htmlattributes:'class:form-control' }}
+                {% if form.volunteer_other.errors %}
+                    <p class="help-inline text-danger">{{ form.volunteer_other.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group required{% if form.previous_organizing_experience.errors %} has-error{% endif %}">
+            <label for="{{ form.previous_organizing_experience.auto_id }}" class="col-sm-2 control-label">Previous Organizing Experience</label>
+            <div class="col-sm-4">
+                {{ form.previous_organizing_experience|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group required{% if form.active_in_presidential_primary.errors %} has-error{% endif %}">
+            <label for="{{ form.active_in_presidential_primary.auto_id }}" class="col-sm-2 control-label">Active in Presidential Primary</label>
+            <div class="col-sm-4">
+                {{ form.active_in_presidential_primary|htmlattributes:'class:form-control' }}
+            </div>
+        </div>
+        <div class="form-group{% if form.other_skills.errors %} has-error{% endif %}">
+            <label for="{{ form.other_skills.auto_id }}" class="col-sm-2 control-label">Other Skills</label>
+            <div class="col-sm-4">
+                {{ form.other_skills|htmlattributes:'class:form-control' }}
+                {% if form.other_skills.errors %}
+                    <p class="help-inline text-danger">{{ form.other_skills.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.facebook_profile.errors %} has-error{% endif %}">
+            <label for="{{ form.facebook_profile.auto_id }}" class="col-sm-2 control-label">Facebook Profile</label>
+a            <div class="col-sm-4">
+                {{ form.facebook_profile|htmlattributes:'class:form-control' }}
+                {% if form.facebook_profile.errors %}
+                    <p class="help-inline text-danger">{{ form.facebook_profile.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.twitter_profile.errors %} has-error{% endif %}">
+            <label for="{{ form.twitter_profile.auto_id }}" class="col-sm-2 control-label">Twitter Profile</label>
+            <div class="col-sm-4">
+                {{ form.twitter_profile|htmlattributes:'class:form-control' }}
+                {% if form.twitter_profile.errors %}
+                    <p class="help-inline text-danger">{{ form.twitter_profile.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.instagram_profile.errors %} has-error{% endif %}">
+            <label for="{{ form.instagram_profile.auto_id }}" class="col-sm-2 control-label">Instagram Profile</label>
+            <div class="col-sm-4">
+                {{ form.instagram_profile|htmlattributes:'class:form-control' }}
+                {% if form.instagram_profile.errors %}
+                    <p class="help-inline text-danger">{{ form.instagram_profile.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if form.volunteer_comments.errors %} has-error{% endif %}">
+            <label for="{{ form.volunteer_comments.auto_id }}" class="col-sm-2 control-label">Comments</label>
+            <div class="col-sm-4">
+                {{ form.volunteer_comments|htmlattributes:'class:form-control' }}
+                {% if form.volunteer_comments.errors %}
+                    <p class="help-inline text-danger">{{ form.volunteer_comments.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

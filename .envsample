@@ -1,0 +1,15 @@
+DJANGO_SETTINGS_MODULE=volunteermgr.settings.local
+SECRET_KEY=yourkeyhere
+DATABASE_URL=psql://user:password@server:port/dbname
+SITE_NAME=Volunteer Manager
+SITE_URL=http://127.0.0.1:8000
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+FROM_EMAIL=me@mydomain.com
+EMAIL_HOST=email.mydomain.com
+EMAIL_HOST_USER=myemailuser
+EMAIL_HOST_PASSWORD=myemailpassword
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+RECAPTCHA_SITE_KEY=yourkeyhere
+RECAPTCHA_SECRET_KEY=yourkeyhere

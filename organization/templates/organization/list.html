@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function(){
+            $('#organizationsTable').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'ajax': '{% url 'organization:list_json' %}',
+                'columnDefs': [
+                    { orderable: false, targets: [2, 3] }
+                ],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Filter ...'
+                },
+                dom: 'lBftrip',
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, 'All']],
+                pageLength: 25,
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block title %}States{% endblock %}
+
+{% block content %}
+    <h2>
+        States
+        <span class="pull-right">
+            <a class="btn btn-default" role="button" data-toggle="collapse" href="#help" aria-expanded="false"
+               aria-controls="help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'organization:add' %}">
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;Add State
+                    </button>
+                </a>
+            {% endif %}
+        </span>
+    </h2>
+
+    <div class="collapse" id="help">
+        <div class="well">
+            <h4>Instructions</h4>
+            <ul>
+                <li>Type in the filter box to filter the list by name or state</li>
+                <li>Click the state name to view the states's staff and other details</li>
+                <li>Use the buttons above the list to copy, export to Excel, etc. but note that it will
+                    <em>only export what is visible on the screen</em>. If you want to export more than
+                    25 records, be sure and change the "Show 25 entries" selection to "All" before exporting.</li>
+                <li>Click "Add State" to add a new state</li>
+            </ul>
+        </div>
+    </div>
+
+    <table id="organizationsTable" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" style="width:100%;" data-page-length="25">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>State</th>
+                <th>National Leads</th>
+                <th>State Leads</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+{% endblock %}
