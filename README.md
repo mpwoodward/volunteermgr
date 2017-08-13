@@ -23,6 +23,7 @@ If you add customizations or new things you find useful, I'm happy to look at pu
 * Run the migrations against a clean Postgres database
 * Load gis/fixtures/ZipCode.json fixture
 * Load security/fixtures/AccountType.json fixture
+* Create a superuser
 
 ## General Information About the Application
 
